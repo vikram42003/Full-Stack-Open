@@ -1,23 +1,25 @@
 const App = () => {
   const course = "Half Stack application development";
-  const part1 = {
-    name: "Fundamentals of React",
-    exercises: 10,
-  };
-  const part2 = {
-    name: "Using props to pass data",
-    exercises: 7,
-  };
-  const part3 = {
-    name: "State of a component",
-    exercises: 14,
-  };
+  const parts = [
+    {
+      name: "Fundamentals of React",
+      exercises: 10,
+    },
+    {
+      name: "Using props to pass data",
+      exercises: 7,
+    },
+    {
+      name: "State of a component",
+      exercises: 14,
+    },
+  ];
 
   return (
     <div>
       <Header course={course} />
-      <Content partsArray={[part1, part2, part3]} />
-      <Total exercises={[part1.exercises, part2.exercises, part3.exercises]} />
+      <Content partsArray={parts} />
+      <Total exercises={parts} />
     </div>
   );
 };
@@ -36,7 +38,7 @@ const Content = ({ partsArray }) => {
   );
 };
 
-const Part = ({ part: {name, exercises} }) => {
+const Part = ({ part: { name, exercises } }) => {
   return (
     <p>
       {name} {exercises}
@@ -45,9 +47,11 @@ const Part = ({ part: {name, exercises} }) => {
 };
 
 const Total = ({ exercises }) => {
-  return (
-    <p>Number of exercises {exercises[0] + exercises[1] + exercises[2]}</p>
+  let total = exercises.reduce(
+    (accumulator, currentPart) => accumulator + currentPart.exercises,
+    0
   );
+  return <p>Number of exercises {total}</p>;
 };
 
 export default App;
