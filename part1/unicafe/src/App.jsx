@@ -5,7 +5,12 @@ const Button = ({ text, onClick }) => {
 };
 
 const StatisticLine = ({ text, value }) => {
-  return <p>{text} {value}</p>
+  return (
+    <tr>
+      <th>{text}</th>
+      <td>{value}</td>
+    </tr>
+  )
 }
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -15,15 +20,17 @@ const Statistics = ({ good, neutral, bad }) => {
     <div>
       <h2>Statistics</h2>
       {total ? (
-        <>
-          <StatisticLine text={"good"} value={good}/>
-          <StatisticLine text={"neutral"} value={neutral}/>
-          <StatisticLine text={"bad"} value={bad}/>
-          <StatisticLine text={"total"} value={total}/>
-          {/* Display average and positive percentage, handling NaN cases by defaulting to 0 */}
-          <StatisticLine text={"average"} value={(good - bad) / total || 0}/>
-          <StatisticLine text={"positive"} value={((good / total) * 100) + " %"}/>
-        </>
+        <table>
+          <tbody>
+            <StatisticLine text={"good"} value={good}/>
+            <StatisticLine text={"neutral"} value={neutral}/>
+            <StatisticLine text={"bad"} value={bad}/>
+            <StatisticLine text={"total"} value={total}/>
+            {/* Display average and positive percentage, handling NaN cases by defaulting to 0 */}
+            <StatisticLine text={"average"} value={(good - bad) / total || 0}/>
+            <StatisticLine text={"positive"} value={((good / total) * 100) + " %"}/>
+          </tbody>
+        </table>
       ) : (
         <p>No feedback given</p>
       )}
