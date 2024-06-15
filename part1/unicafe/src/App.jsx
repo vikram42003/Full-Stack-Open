@@ -1,12 +1,27 @@
-import { useState } from 'react'
+import { useState } from "react";
+
+const Statistics = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad;
+
+  return (
+    <div>
+      <h2>Statistics</h2>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>all {total}</p>
+      {/* if the division results to "NaN" then render 0 */}
+      <p>average {(good - bad) / total || 0}</p>
+      <p>positive {good / total || 0}</p>
+    </div>
+  );
+};
 
 const App = () => {
   // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-
-  const total = good + neutral + bad;
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   function handleGood() {
     setGood((g) => g + 1);
@@ -28,16 +43,9 @@ const App = () => {
       <button onClick={handleNeutral}>neutral</button>
       <button onClick={handleBad}>bad</button>
 
-      <h2>Statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {total}</p>
-      {/* if the division results to "NaN" then render 0 */}
-      <p>average {((good - bad) / total) || 0}</p>
-      <p>positive {(good / total) || 0}</p>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
