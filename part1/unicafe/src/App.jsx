@@ -6,6 +6,8 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const total = good + neutral + bad;
+
   function handleGood() {
     setGood((g) => g + 1);
   }
@@ -30,6 +32,10 @@ const App = () => {
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {total}</p>
+      {/* if the division results to "NaN" then render 0 */}
+      <p>average {((good - bad) / total) || 0}</p>
+      <p>positive {(good / total) || 0}</p>
     </div>
   )
 }
