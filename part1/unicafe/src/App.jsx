@@ -6,13 +6,19 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <div>
       <h2>Statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {total}</p>
-      {/* if the division results to "NaN" then render 0 */}
-      <p>average {(good - bad) / total || 0}</p>
-      <p>positive {good / total || 0}</p>
+      {total ? (
+        <>
+          <p>good {good}</p>
+          <p>neutral {neutral}</p>
+          <p>bad {bad}</p>
+          <p>all {total}</p>
+          {/* Display average and positive percentage, handling NaN cases by defaulting to 0 */}
+          <p>average {(good - bad) / total || 0}</p>
+          <p>positive {((good / total) * 100).toFixed(1)} %</p>
+        </>
+      ) : (
+        <p>No feedback given</p>
+      )}
     </div>
   );
 };
@@ -43,7 +49,7 @@ const App = () => {
       <button onClick={handleNeutral}>neutral</button>
       <button onClick={handleBad}>bad</button>
 
-      <Statistics good={good} neutral={neutral} bad={bad}/>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
