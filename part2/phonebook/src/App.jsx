@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -7,82 +10,23 @@ const App = () => {
     { name: "Dan Abramov", number: "12-43-234345", id: 3 },
     { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
   const [query, setQuery] = useState("");
 
   const personsToDisplay = persons.filter((person) =>
     person.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  const handleAddPerson = (event) => {
-    event.preventDefault();
-
-    if (persons.some((person) => person.name === newName)) {
-      window.alert(`${newName} is already added to the phonebook`);
-      return;
-    }
-
-    if (newNumber === "") {
-      window.alert("Number field cannot be empty");
-      return;
-    }
-
-    setPersons((p) => [...p, { name: newName, number: newNumber, id: persons.length + 1 }]);
-    setNewName("");
-    setNewNumber("");
-  };
-
   return (
     <div>
       <h2>Phonebook</h2>
 
-      <div>
-        filter shown with{" "}
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </div>
+      <Filter query={query} setQuery={setQuery} />
 
-      <div>
-        <h2>Add a new</h2>
-        <form onSubmit={handleAddPerson}>
-          <div>
-            name:{" "}
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-          </div>
-          <div>
-            number:{" "}
-            <input
-              type="text"
-              value={newNumber}
-              onChange={(e) => setNewNumber(e.target.value)}
-            />
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
-      </div>
+      <h3>Add a new</h3>
+      <PersonForm persons={persons} setPersons={setPersons} />
 
-      <div>
-        <h2>Numbers</h2>
-        <div>
-          {personsToDisplay.map((person) => {
-            return (
-              <div key={person.id}>
-                {person.name} {person.number}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <h3>Numbers</h3>
+      <Persons personsToDisplay={personsToDisplay} />
     </div>
   );
 };
