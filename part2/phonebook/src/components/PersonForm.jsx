@@ -8,23 +8,41 @@ const PersonForm = ({ persons, setPersons }) => {
   const handleAddPerson = (event) => {
     event.preventDefault();
 
-    if (persons.some((person) => person.name === newName)) {
-      window.alert(`${newName} is already added to the phonebook`);
+    if (newName === "" || newNumber === "") {
+      window.alert("Name or Number field cannot be empty");
       return;
     }
 
-    if (newNumber === "") {
-      window.alert("Number field cannot be empty");
+    if (persons.some((p) => p.name === newName && p.number === newNumber)) {
+      alert(
+        `${newName} is already added to the phonebook with the same number`
+      );
       return;
+    } else if (persons.some((p) => p.name === newName)) {
+      if (
+        window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with a new one ?`
+        )
+      ) {
+        const contactCopy = { ...persons.find((p) => p.name === newName) };
+        contactCopy.number = newNumber;
+        contactsService.update(contactCopy.id, contactCopy).then(() => {
+          setPersons(
+            persons.map((p) => (p.name !== newName ? p : contactCopy))
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+      }
+    } else {
+      contactsService
+        .create({ name: newName, number: newNumber })
+        .then((data) => {
+          setPersons((p) => [...p, data]);
+          setNewName("");
+          setNewNumber("");
+        });
     }
-
-    contactsService
-      .create({ name: newName, number: newNumber })
-      .then((data) => {
-        setPersons((p) => [...p, data]);
-        setNewName("");
-        setNewNumber("");
-      });
   };
 
   return (

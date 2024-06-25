@@ -22,4 +22,11 @@ const deleteContact = (id) => {
     .catch((error) => console.log(error));
 };
 
-export default { getAll, create, deleteContact };
+const update = (id, updatedContact) => {
+  return axios
+    .put(`${url}/${id}`, updatedContact)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+};
+
+export default { getAll, create, deleteContact, update };
