@@ -15,4 +15,11 @@ const create = (newContact) => {
     .catch((error) => console.log(error));
 };
 
-export default { getAll, create };
+const deleteContact = (id) => {
+  return axios
+    .delete(`${url}/${id}`)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+};
+
+export default { getAll, create, deleteContact };
