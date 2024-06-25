@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+
+import contactsService from "./services/contacts";
+
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
@@ -9,14 +11,7 @@ const App = () => {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        setPersons(response.data);
-      })
-      .catch((error) => {
-        console.log("Error: ", error.message, "\n", error);
-      });
+    contactsService.getAll().then((data) => setPersons(data));
   }, []);
 
   const personsToDisplay = persons.filter((person) =>

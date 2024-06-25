@@ -1,4 +1,5 @@
 import { useState } from "react";
+import contactsService from "../services/contacts";
 
 const PersonForm = ({ persons, setPersons }) => {
   const [newName, setNewName] = useState("");
@@ -17,12 +18,13 @@ const PersonForm = ({ persons, setPersons }) => {
       return;
     }
 
-    setPersons((p) => [
-      ...p,
-      { name: newName, number: newNumber, id: persons.length + 1 },
-    ]);
-    setNewName("");
-    setNewNumber("");
+    contactsService
+      .create({ name: newName, number: newNumber })
+      .then((data) => {
+        setPersons((p) => [...p, data]);
+        setNewName("");
+        setNewNumber("");
+      });
   };
 
   return (
