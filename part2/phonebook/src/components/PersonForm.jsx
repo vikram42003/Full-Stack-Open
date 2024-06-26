@@ -1,7 +1,7 @@
 import { useState } from "react";
 import contactsService from "../services/contacts";
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, showNotification }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
@@ -9,12 +9,13 @@ const PersonForm = ({ persons, setPersons }) => {
     event.preventDefault();
 
     if (newName === "" || newNumber === "") {
-      window.alert("Name or Number field cannot be empty");
+      showNotification("failure", "Name or Number field cannot be empty");
       return;
     }
 
     if (persons.some((p) => p.name === newName && p.number === newNumber)) {
-      alert(
+      showNotification(
+        "failure",
         `${newName} is already added to the phonebook with the same number`
       );
       return;
@@ -26,21 +27,33 @@ const PersonForm = ({ persons, setPersons }) => {
       ) {
         const contactCopy = { ...persons.find((p) => p.name === newName) };
         contactCopy.number = newNumber;
-        contactsService.update(contactCopy.id, contactCopy).then(() => {
-          setPersons(
-            persons.map((p) => (p.name !== newName ? p : contactCopy))
-          );
-          setNewName("");
-          setNewNumber("");
-        });
+        contactsService
+          .update(contactCopy.id, contactCopy)
+          .then(() => {
+            showNotification("success", `Successfully updated "${newName}"`);
+            setPersons(
+              persons.map((p) => (p.name !== newName ? p : contactCopy))
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            console.log(error);
+            showNotification("failure", `Failed to update "${newName}"`);
+          });
       }
     } else {
       contactsService
         .create({ name: newName, number: newNumber })
         .then((data) => {
+          showNotification("success", `Successfully added "${newName}"`);
           setPersons((p) => [...p, data]);
           setNewName("");
           setNewNumber("");
+        })
+        .catch((error) => {
+          console.log(error);
+          showNotification("failure", `Failed to add "${newName}"`);
         });
     }
   };
