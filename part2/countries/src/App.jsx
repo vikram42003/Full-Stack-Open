@@ -4,11 +4,11 @@ import countriesService from "./services/countriesService";
 
 import Searchbar from "./Components/Searchbar";
 import List from "./Components/List";
-import CountryData from "./Components/CountryData";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [countriesList, setCountiresList] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
     countriesService
@@ -21,9 +21,11 @@ function App() {
       });
   }, []);
 
-  const list = countriesList ? countriesList.filter((c) =>
-    c.name.common.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : null;
+  const list = countriesList
+    ? countriesList.filter((c) =>
+        c.name.common.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : null;
 
   let componentToRender;
   if (list === null) {
@@ -31,9 +33,27 @@ function App() {
   } else if (list.length === 0) {
     componentToRender = <div>No country found</div>;
   } else if (list.length === 1) {
-    componentToRender = <CountryData country={list[0]} />;
+    if (selectedCountry?.name.common !== list[0].name.common)
+      setSelectedCountry(list[0]);
+    componentToRender = (
+      <List
+        list={list}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
+    );
+  } else if (list.length === countriesList.length) {
+    componentToRender = <div>Enter the name of a country</div>;
+  } else if (list.length > 10) {
+    componentToRender = <div>Too many matches, specify another filter</div>;
   } else {
-    componentToRender = <List list={list} />
+    componentToRender = (
+      <List
+        list={list}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
+    );
   }
 
   return (
