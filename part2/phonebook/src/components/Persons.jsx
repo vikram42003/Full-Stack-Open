@@ -15,6 +15,7 @@ const Persons = ({ personsToDisplay, handleDeletePerson }) => {
   );
 };
 
+
 export default Persons;
 
 /*
